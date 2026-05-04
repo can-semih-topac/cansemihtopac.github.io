@@ -7,34 +7,107 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #0f172a; color: #f8fafc; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        :root{
+            --bg: #000000;
+            --text: #f8fafc;
+            --glass-bg: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.06);
+            --muted: #94a3b8;
+        }
+        .light{
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --glass-bg: rgba(15,23,42,0.04);
+            --glass-border: rgba(15,23,42,0.06);
+            --muted: #475569;
+        }
+        body { background-color: var(--bg); color: var(--text); }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); }
+        .muted { color: var(--muted); }
+
+        /* Theme switch */
+        .theme-switch{ width:72px; height:40px; padding:4px; display:inline-flex; align-items:center; justify-content:space-between; border-radius:9999px; position:relative; cursor:pointer; border:1px solid var(--glass-border); background:var(--glass-bg); }
+        /* Icons positioned over knob center */
+        .theme-switch .icon{ font-size:16px; color:var(--muted); position:absolute; top:50%; transform:translateY(-50%); z-index:3; pointer-events:none; transition:opacity .2s ease, left .22s ease; }
+        /* Moon: centered over knob when inactive (right) */
+        .theme-switch .fa-moon{ color:#94a3b8; left:46px; opacity:1; }
+        /* Sun: centered over knob when active (left) */
+        .theme-switch .fa-sun{ color:#ffd166; left:12px; opacity:0; }
+        /* Knob slides under icons */
+        .theme-switch .knob{ position:absolute; top:6px; left:40px; width:28px; height:28px; border-radius:9999px; background:var(--text); transition:left .22s ease; box-shadow:0 6px 18px rgba(2,6,23,0.45); z-index:2; }
+        /* When active (light theme), knob moves left */
+        .theme-switch.active .knob{ left:6px; }
+        /* Active state: show sun, hide moon */
+        .theme-switch.active .fa-sun{ opacity:1; }
+        .theme-switch.active .fa-moon{ opacity:0; }
+        /* Inactive state: show moon, hide sun */
+        .theme-switch:not(.active) .fa-sun{ opacity:0; }
+        .theme-switch:not(.active) .fa-moon{ opacity:1; }
+        /* Cinematic side lighting accents */
+        :root{ --accent-left: rgba(14,165,233,0.18); --accent-right: rgba(59,130,246,0.18); --accent-opacity: 0.36; }
+        .light{ --accent-left: rgba(14,165,233,0.06); --accent-right: rgba(59,130,246,0.06); --accent-opacity: 0.12; }
+        .accent-left, .accent-right{ position:fixed; top:0; bottom:0; width:42%; pointer-events:none; z-index:0; mix-blend-mode:screen; opacity:var(--accent-opacity); }
+        .light .accent-left, .light .accent-right{ mix-blend-mode:normal; }
+        .accent-left{ left:-6%; background: radial-gradient(closest-side at 12% 50%, var(--accent-left), transparent 45%); filter: blur(90px); transform: translateX(-6%); }
+        .accent-right{ right:-6%; background: radial-gradient(closest-side at 88% 50%, var(--accent-right), transparent 45%); filter: blur(90px); transform: translateX(6%); }
+        @media (max-width: 768px){ .accent-left, .accent-right{ width:50%; filter: blur(60px); } }
+        /* Contact form: ensure input/textarea text and placeholders are readable */
+        #contactForm input, #contactForm textarea, #contactForm select { color: var(--text); }
+        #contactForm input::placeholder, #contactForm textarea::placeholder { color: rgba(255,255,255,0.78); }
+        /* In light theme keep placeholders readable on light background */
+        .light #contactForm input::placeholder, .light #contactForm textarea::placeholder { color: rgba(15,23,42,0.5); }
+        /* Contact labels in light theme: make labels dark for contrast */
+        .light #contactForm label { color: var(--text); }
+        /* In light theme make input/textarea background white and text dark for readability */
+        .light #contactForm input, .light #contactForm textarea {
+            color: var(--text);
+            background-color: #ffffff;
+            border: 1px solid rgba(15,23,42,0.12);
+        }
     </style>
 </head>
 <body class="font-sans antialiased">
+    <div class="accent-left" aria-hidden="true"></div>
+    <div class="accent-right" aria-hidden="true"></div>
 
     <nav class="fixed w-full z-50 glass">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <span class="text-xl font-bold tracking-tighter text-blue-400">CST.</span>
-            <div class="space-x-6 text-sm font-medium uppercase tracking-widest">
+            <span class="text-xl font-bold tracking-tighter text-blue-400">Can</span>
+            <div class="space-x-4 text-sm font-medium uppercase tracking-widest flex items-center">
                 <a href="#about" class="hover:text-blue-400 transition">Hakkımda</a>
                 <a href="#skills" class="hover:text-blue-400 transition">Yetenekler</a>
                 <a href="#projects" class="hover:text-blue-400 transition">Projeler</a>
-                <a href="mailto:can.semih.topac18@gmail.com" class="bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition">İletişim</a>
+                <a href="#contact" class="bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition inline-block ml-3">İletişim</a>
+                <button id="themeToggle" class="theme-switch ml-3" aria-label="Tema değiştir">
+                    <i class="fas fa-sun icon"></i>
+                    <i class="fas fa-moon icon"></i>
+                    <span class="knob"></span>
+                </button>
             </div>
         </div>
     </nav>
 
-    <section class="h-screen flex flex-col justify-center items-center text-center px-4">
+    <section id="about" class="h-screen flex flex-col justify-center items-center text-center px-4">
         <h1 class="text-5xl md:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
             Can Semih Topaç
         </h1>
         <p class="text-xl md:text-2xl text-slate-400 mb-8 max-w-2xl">
             Bilgisayar Mühendisi | .NET 8 & Backend Developer
         </p>
-        <div class="flex space-x-4">
-            <a href="https://github.com/can-semih-topac" target="_blank" class="text-3xl hover:text-blue-400 transition"><i class="fab fa-github"></i></a>
-            <a href="#" class="text-3xl hover:text-blue-400 transition"><i class="fab fa-linkedin"></i></a>
+        <div class="flex space-x-6 items-center">
+            <a href="https://github.com/can-semih-topac" target="_blank" class="flex flex-col items-center text-sm text-center hover:text-blue-400 transition" title="GitHub Profil">
+                <i class="fab fa-github text-3xl"></i>
+                <span class="mt-1">GitHub Profil</span>
+            </a>
+            <a href="https://github.com/KouKaggleProject" target="_blank" class="flex flex-col items-center text-sm text-center hover:text-emerald-400 transition" title="GitHub Organizasyon">
+                <i class="fab fa-github text-3xl"></i>
+                <span class="mt-1">KOUggle Organizasyon</span>
+            </a>
+            <a href="https://www.linkedin.com/in/can-semih-topac/" target="_blank" class="flex flex-col items-center text-sm text-center hover:text-blue-400 transition" title="LinkedIn">
+                <i class="fab fa-linkedin text-3xl"></i>
+                <span class="mt-1">LinkedIn</span>
+            </a>
+
         </div>
     </section>
 
@@ -73,8 +146,8 @@
                         <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">ASP.NET Core</span>
                         <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">MSSQL</span>
                     </div>
-                    <a href="https://github.com/can-semih-topac" class="text-blue-400 text-sm font-bold flex items-center group">
-                        Kodları İncele <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
+                    <a href="https://github.com/KouKaggleProject" target="_blank" class="text-blue-400 text-sm font-bold flex items-center group" title="KOU Kaggle Organization">
+                        Projeyi İncele <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
                     </a>
                 </div>
                 <div class="glass p-8 rounded-2xl hover:scale-[1.02] transition">
@@ -84,9 +157,61 @@
                         <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Entity Framework</span>
                         <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">JavaScript</span>
                     </div>
-                    <a href="https://github.com/can-semih-topac" class="text-blue-400 text-sm font-bold flex items-center group">
-                        Kodları İncele <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
+                    <a href="https://github.com/can-semih-topac" target="_blank" class="text-blue-400 text-sm font-bold flex items-center group" title="Can Semih Topaç - Kodlar">
+                        Projeyi İncele <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
                     </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 scroll-mt-24 bg-slate-900/40">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-3">İletişim</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Adını, e-posta adresini ve mesajını yaz. Gönder dediğinde mesaj doğrudan bana iletilir.</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="glass p-8 rounded-2xl">
+                    <form id="contactForm" class="space-y-5" action="https://formsubmit.co/can.semih.topac18@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="Web Sitesi Üzerinden İletişim">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="contactName" class="block text-sm font-medium text-slate-300 mb-2">Ad Soyad</label>
+                                <input id="contactName" name="name" type="text" autocomplete="name" required class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" placeholder="Adın Soyadın">
+                            </div>
+                            <div>
+                                <label for="contactEmail" class="block text-sm font-medium text-slate-300 mb-2">E-posta</label>
+                                <input id="contactEmail" name="email" type="email" autocomplete="email" required class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" placeholder="ornek@mail.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="contactMessage" class="block text-sm font-medium text-slate-300 mb-2">Mesaj</label>
+                            <textarea id="contactMessage" name="message" rows="6" required class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" placeholder="Mesajını buraya yaz..."></textarea>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition">Gönder</button>
+                        </div>
+
+                        <p id="contactStatus" class="text-sm text-emerald-400 hidden">Mesaj gönderiliyor...</p>
+                    </form>
+                </div>
+
+                <div class="glass px-6 py-5 rounded-2xl flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="min-w-0">
+                        <h3 class="text-lg font-bold">Doğrudan Ulaş</h3>
+                        <p class="text-white text-sm">E-posta adresini kopyala veya gönder butonuyla mail uygulamana geç.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm break-all text-slate-100" id="emailText">can.semih.topac18@gmail.com</span>
+                        <button id="copyEmail" type="button" class="shrink-0 text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg">Kopyala</button>
+                    </div>
+                    <p id="copyStatus" class="text-xs text-emerald-400 hidden"></p>
                 </div>
             </div>
         </div>
@@ -95,6 +220,85 @@
     <footer class="py-10 text-center text-slate-500 text-xs border-t border-slate-800">
         &copy; 2026 Can Semih Topaç. Built with Clean Code Principles.
     </footer>
+
+    <script>
+        (function(){
+            const copyBtn = document.getElementById('copyEmail');
+            const emailTextEl = document.getElementById('emailText');
+            const copyStatus = document.getElementById('copyStatus');
+            const contactStatus = document.getElementById('contactStatus');
+            const contactForm = document.getElementById('contactForm');
+            const email = emailTextEl ? emailTextEl.textContent.trim() : 'can.semih.topac18@gmail.com';
+
+            copyBtn && copyBtn.addEventListener('click', async function(){
+                try{
+                    await navigator.clipboard.writeText(email);
+                    copyStatus.classList.remove('hidden');
+                    setTimeout(function(){ copyStatus.classList.add('hidden'); }, 2000);
+                }catch(err){
+                    alert('Kopyalama desteklenmiyor: ' + err);
+                }
+            });
+
+            contactForm && contactForm.addEventListener('submit', function(e){
+                e.preventDefault();
+                contactStatus.classList.remove('hidden');
+                contactStatus.textContent = 'Gönderiliyor...';
+
+                const submitUrl = 'https://formsubmit.co/ajax/can.semih.topac18@gmail.com';
+                const formData = new FormData(contactForm);
+
+                // include anti-spam hidden fields if present
+                fetch(submitUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(async res => {
+                    if (!res.ok) throw new Error('Ağ hatası');
+                    const data = await res.json();
+                    if (data.success === 'true' || data.success === true) {
+                        contactStatus.textContent = 'Teşekkürler — mesajınız iletildi.';
+                        contactForm.reset();
+                        setTimeout(()=> contactStatus.classList.add('hidden'), 5000);
+                    } else {
+                        throw new Error(data.message || 'Gönderim başarısız');
+                    }
+                }).catch(err => {
+                    contactStatus.textContent = 'Gönderim sırasında hata: ' + (err.message || err);
+                    setTimeout(()=> contactStatus.classList.add('hidden'), 5000);
+                });
+            });
+        })();
+    </script>
+
+    <script>
+        (function(){
+            const themeToggle = document.getElementById('themeToggle');
+            const saved = localStorage.getItem('theme');
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            const initial = saved || (prefersLight ? 'light' : 'dark');
+
+            function applyTheme(t){
+                if(t === 'light'){
+                    document.documentElement.classList.add('light');
+                    if(themeToggle){ themeToggle.classList.add('active'); }
+                } else {
+                    document.documentElement.classList.remove('light');
+                    if(themeToggle){ themeToggle.classList.remove('active'); }
+                }
+                localStorage.setItem('theme', t);
+            }
+
+            applyTheme(initial);
+
+            themeToggle && themeToggle.addEventListener('click', function(){
+                const cur = document.documentElement.classList.contains('light') ? 'light' : 'dark';
+                applyTheme(cur === 'light' ? 'dark' : 'light');
+            });
+        })();
+    </script>
 
 </body>
 </html>
