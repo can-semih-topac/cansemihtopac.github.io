@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can Semih Topaç | Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <nav class="fixed w-full z-50 glass">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <span class="text-xl font-bold tracking-tighter text-blue-400">CST.</span>
+            <div class="space-x-6 text-sm font-medium uppercase tracking-widest">
+                <a href="#about" class="hover:text-blue-400 transition">Hakkımda</a>
+                <a href="#skills" class="hover:text-blue-400 transition">Yetenekler</a>
+                <a href="#projects" class="hover:text-blue-400 transition">Projeler</a>
+                <a href="mailto:can.semih.topac18@gmail.com" class="bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition">İletişim</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="h-screen flex flex-col justify-center items-center text-center px-4">
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+            Can Semih Topaç
+        </h1>
+        <p class="text-xl md:text-2xl text-slate-400 mb-8 max-w-2xl">
+            Bilgisayar Mühendisi | .NET 8 & Backend Developer
+        </p>
+        <div class="flex space-x-4">
+            <a href="https://github.com/can-semih-topac" target="_blank" class="text-3xl hover:text-blue-400 transition"><i class="fab fa-github"></i></a>
+            <a href="#" class="text-3xl hover:text-blue-400 transition"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </section>
+
+    <section id="skills" class="py-20 bg-slate-900/50">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center underline decoration-blue-500 underline-offset-8">Teknik Yetkinlikler</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-6 glass rounded-xl">
+                    <i class="fas fa-code text-blue-500 text-3xl mb-3"></i>
+                    <h3 class="font-bold">.NET 8 / C#</h3>
+                </div>
+                <div class="p-6 glass rounded-xl">
+                    <i class="fas fa-database text-emerald-500 text-3xl mb-3"></i>
+                    <h3 class="font-bold">MSSQL Server</h3>
+                </div>
+                <div class="p-6 glass rounded-xl">
+                    <i class="fas fa-layer-group text-purple-500 text-3xl mb-3"></i>
+                    <h3 class="font-bold">ASP.NET MVC</h3>
+                </div>
+                <div class="p-6 glass rounded-xl">
+                    <i class="fab fa-js text-yellow-500 text-3xl mb-3"></i>
+                    <h3 class="font-bold">JavaScript</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12">Öne Çıkan Projeler</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-2xl hover:scale-[1.02] transition">
+                    <h3 class="text-xl font-bold mb-2">KOU Kaggle Platformu</h3>
+                    <p class="text-slate-400 mb-4 text-sm">.NET 8 ve MVC mimarisi ile geliştirilmiş, veri bilimi yarışmaları için merkezi bir platform.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">ASP.NET Core</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">MSSQL</span>
+                    </div>
+                    <a href="https://github.com/can-semih-topac" class="text-blue-400 text-sm font-bold flex items-center group">
+                        Kodları İncele <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
+                    </a>
+                </div>
+                <div class="glass p-8 rounded-2xl hover:scale-[1.02] transition">
+                    <h3 class="text-xl font-bold mb-2">Obesity Tracking System</h3>
+                    <p class="text-slate-400 mb-4 text-sm">Klinik analiz ve hasta takibi için tasarlanmış, C# ve JS tabanlı web otomasyonu.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Entity Framework</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded">JavaScript</span>
+                    </div>
+                    <a href="https://github.com/can-semih-topac" class="text-blue-400 text-sm font-bold flex items-center group">
+                        Kodları İncele <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center text-slate-500 text-xs border-t border-slate-800">
+        &copy; 2026 Can Semih Topaç. Built with Clean Code Principles.
+    </footer>
+
+</body>
+</html>
