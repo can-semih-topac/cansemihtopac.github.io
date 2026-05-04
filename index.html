@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Can Semih Topaç | Software Engineer</title>
+    <title>Can Semih Topaç | Bilgisayar Mühendisi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -51,6 +51,10 @@
         .accent-left{ left:-6%; background: radial-gradient(closest-side at 12% 50%, var(--accent-left), transparent 45%); filter: blur(90px); transform: translateX(-6%); }
         .accent-right{ right:-6%; background: radial-gradient(closest-side at 88% 50%, var(--accent-right), transparent 45%); filter: blur(90px); transform: translateX(6%); }
         @media (max-width: 768px){ .accent-left, .accent-right{ width:50%; filter: blur(60px); } }
+        /* Mobile nav visibility improvement */
+        @media (max-width: 768px){ nav.glass { background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); } }
+        .light nav.glass { color: var(--text); }
+        @media (max-width: 768px){ .light nav.glass { background: rgba(248,250,252,0.95); } }
         /* Contact form: ensure input/textarea text and placeholders are readable */
         #contactForm input, #contactForm textarea, #contactForm select { color: var(--text); }
         #contactForm input::placeholder, #contactForm textarea::placeholder { color: rgba(255,255,255,0.78); }
@@ -174,7 +178,7 @@
 
             <div class="space-y-6">
                 <div class="glass p-8 rounded-2xl">
-                    <form id="contactForm" class="space-y-5" action="https://formsubmit.co/can.semih.topac18@gmail.com" method="POST">
+                    <form id="contactForm" class="space-y-5" action="https://formsubmit.co/ed5626c8fec925301fba59b6e588fe61" method="POST">
                         <input type="hidden" name="_subject" value="Web Sitesi Üzerinden İletişim">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_template" value="table">
@@ -245,7 +249,7 @@
                 contactStatus.classList.remove('hidden');
                 contactStatus.textContent = 'Gönderiliyor...';
 
-                const submitUrl = 'https://formsubmit.co/ajax/can.semih.topac18@gmail.com';
+                const submitUrl = 'https://formsubmit.co/ajax/ed5626c8fec925301fba59b6e588fe61';
                 const formData = new FormData(contactForm);
 
                 // include anti-spam hidden fields if present
