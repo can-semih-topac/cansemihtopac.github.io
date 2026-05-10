@@ -25,24 +25,56 @@
         .glass { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); }
         .muted { color: var(--muted); }
 
-        /* Theme switch */
-        .theme-switch{ width:72px; height:40px; padding:4px; display:inline-flex; align-items:center; justify-content:space-between; border-radius:9999px; position:relative; cursor:pointer; border:1px solid var(--glass-border); background:var(--glass-bg); }
-        /* Icons positioned over knob center */
-        .theme-switch .icon{ font-size:16px; color:var(--muted); position:absolute; top:50%; transform:translateY(-50%); z-index:3; pointer-events:none; transition:opacity .2s ease, left .22s ease; }
-        /* Moon: centered over knob when inactive (right) */
-        .theme-switch .fa-moon{ color:#94a3b8; left:46px; opacity:1; }
-        /* Sun: centered over knob when active (left) */
-        .theme-switch .fa-sun{ color:#ffd166; left:12px; opacity:0; }
-        /* Knob slides under icons */
-        .theme-switch .knob{ position:absolute; top:6px; left:40px; width:28px; height:28px; border-radius:9999px; background:var(--text); transition:left .22s ease; box-shadow:0 6px 18px rgba(2,6,23,0.45); z-index:2; }
-        /* When active (light theme), knob moves left */
-        .theme-switch.active .knob{ left:6px; }
-        /* Active state: show sun, hide moon */
-        .theme-switch.active .fa-sun{ opacity:1; }
-        .theme-switch.active .fa-moon{ opacity:0; }
-        /* Inactive state: show moon, hide sun */
-        .theme-switch:not(.active) .fa-sun{ opacity:0; }
-        .theme-switch:not(.active) .fa-moon{ opacity:1; }
+        /* Theme switch (matches reference look) */
+        .theme-switch{
+            width: 64px;
+            height: 36px;
+            border-radius: 9999px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            border: 0;
+            padding: 0;
+            background: #1d8df7;
+            transition: background-color .22s ease;
+        }
+        .theme-switch .knob{
+            position: absolute;
+            top: 4px;
+            left: 32px;
+            width: 28px;
+            height: 28px;
+            border-radius: 9999px;
+            background: #f8fafc;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.35);
+            transition: left .22s ease;
+        }
+        .theme-switch .knob i{
+            font-size: 14px;
+            line-height: 1;
+            color: #1e3a8a;
+            border-radius: 9999px;
+            padding: 2px;
+        }
+        .theme-switch.active{
+            background: #efb447;
+        }
+        .theme-switch.active .knob{
+            left: 4px;
+        }
+        .theme-switch.active .knob i{
+            border: 0;
+            font-size: 13px;
+            padding: 0;
+        }
+        @media (max-width: 768px){
+            .theme-switch{ width:60px; height:34px; }
+            .theme-switch .knob{ width:26px; height:26px; top:4px; left:30px; }
+            .theme-switch.active .knob{ left:4px; }
+        }
         /* Cinematic side lighting accents */
         :root{ --accent-left: rgba(14,165,233,0.18); --accent-right: rgba(59,130,246,0.18); --accent-opacity: 0.36; }
         .light{ --accent-left: rgba(14,165,233,0.06); --accent-right: rgba(59,130,246,0.06); --accent-opacity: 0.12; }
@@ -91,18 +123,21 @@
     <nav class="fixed w-full z-50 glass">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <span class="text-xl font-bold tracking-tighter text-blue-400">Can</span>
-            <button id="mobileMenuToggle" class="hidden text-2xl text-blue-400" aria-label="Menüyü aç">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="md:hidden flex items-center gap-2">
+                <button id="themeToggleMobile" class="theme-switch" aria-label="Tema değiştir mobil">
+                    <span class="knob"><i id="themeIconMobile" class="fas fa-moon"></i></span>
+                </button>
+                <button id="mobileMenuToggle" class="hidden text-2xl text-blue-400" aria-label="Menüyü aç">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
             <div id="navMenu" class="space-x-4 text-sm font-medium uppercase tracking-widest flex items-center">
                 <a href="#about" class="hover:text-blue-400 transition">Hakkımda</a>
                 <a href="#skills" class="hover:text-blue-400 transition">Yetenekler</a>
                 <a href="#projects" class="hover:text-blue-400 transition">Projeler</a>
                 <a href="#contact" class="bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700 transition inline-block ml-3">İletişim</a>
                 <button id="themeToggle" class="theme-switch ml-3" aria-label="Tema değiştir">
-                    <i class="fas fa-sun icon"></i>
-                    <i class="fas fa-moon icon"></i>
-                    <span class="knob"></span>
+                    <span class="knob"><i id="themeIcon" class="fas fa-moon"></i></span>
                 </button>
             </div>
         </div>
@@ -323,6 +358,9 @@
     <script>
         (function(){
             const themeToggle = document.getElementById('themeToggle');
+            const themeToggleMobile = document.getElementById('themeToggleMobile');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeIconMobile = document.getElementById('themeIconMobile');
             const saved = localStorage.getItem('theme');
             const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
             const initial = saved || (prefersLight ? 'light' : 'dark');
@@ -331,9 +369,15 @@
                 if(t === 'light'){
                     document.documentElement.classList.add('light');
                     if(themeToggle){ themeToggle.classList.add('active'); }
+                    if(themeToggleMobile){ themeToggleMobile.classList.add('active'); }
+                    if(themeIcon){ themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun'); }
+                    if(themeIconMobile){ themeIconMobile.classList.remove('fa-moon'); themeIconMobile.classList.add('fa-sun'); }
                 } else {
                     document.documentElement.classList.remove('light');
                     if(themeToggle){ themeToggle.classList.remove('active'); }
+                    if(themeToggleMobile){ themeToggleMobile.classList.remove('active'); }
+                    if(themeIcon){ themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon'); }
+                    if(themeIconMobile){ themeIconMobile.classList.remove('fa-sun'); themeIconMobile.classList.add('fa-moon'); }
                 }
                 localStorage.setItem('theme', t);
             }
@@ -341,6 +385,11 @@
             applyTheme(initial);
 
             themeToggle && themeToggle.addEventListener('click', function(){
+                const cur = document.documentElement.classList.contains('light') ? 'light' : 'dark';
+                applyTheme(cur === 'light' ? 'dark' : 'light');
+            });
+
+            themeToggleMobile && themeToggleMobile.addEventListener('click', function(){
                 const cur = document.documentElement.classList.contains('light') ? 'light' : 'dark';
                 applyTheme(cur === 'light' ? 'dark' : 'light');
             });
